@@ -30,10 +30,13 @@
         
         <receiver android:name=".schedule.ChangeLockScreenPicBroadcastRecevier" >
         </receiver>
+        <receiver android:name=".schedule.ReturnUserWallPaperBroadcastRecevier" >
+        </receiver>
         <receiver android:name=".schedule.NotificateBroadcastRecevier" >
         </receiver>
 
         <service android:name=".service.ChangeWallPaperService" />
+        <service android:name=".service.ReturnUserWallPaperService" />
         <service android:name=".service.NotificationService" />
 
         <activity

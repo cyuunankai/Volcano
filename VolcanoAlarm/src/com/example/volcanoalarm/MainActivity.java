@@ -1,5 +1,6 @@
 package com.example.volcanoalarm;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -7,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -22,6 +24,7 @@ import com.example.volcanoalarm.bean.RelaxDate;
 import com.example.volcanoalarm.db.VolcanoDatabase;
 import com.example.volcanoalarm.schedule.ChangeWallPaperBroadcastRecevier;
 import com.example.volcanoalarm.schedule.NotificateBroadcastRecevier;
+import com.example.volcanoalarm.schedule.ReturnUserWallPaperBroadcastRecevier;
 import com.example.volcanoalarm.util.DateUtil;
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
@@ -33,6 +36,7 @@ public class MainActivity extends ActionBarActivity {
     private CaldroidFragment dialogCaldroidFragment;
     VolcanoDatabase db;
     ChangeWallPaperBroadcastRecevier cwpbr;
+    ReturnUserWallPaperBroadcastRecevier ruwpbr;
     NotificateBroadcastRecevier nbr;
 
     private void setCustomResourceForDates() {
@@ -60,8 +64,12 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+//        File logFile = new File(Environment.getExternalStorageDirectory() + "/volcanoLog.txt");
+//        logFile.delete();
+        
         db = new VolcanoDatabase(getApplicationContext());
         cwpbr = new ChangeWallPaperBroadcastRecevier();
+        ruwpbr = new ReturnUserWallPaperBroadcastRecevier();
         nbr = new NotificateBroadcastRecevier();
 
         final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy");
@@ -113,6 +121,12 @@ public class MainActivity extends ActionBarActivity {
                         Toast.LENGTH_SHORT).show();
                 String dateStr = DateUtil.toDateString(date, DateUtil.DATE_FORMAT_YYYY_MM_DD_HYPHEN);
 
+                List<AlarmDate> beforeAvailableAdList = db.getAvalibleAlarmDates();
+                List<Date> beforeAvailableDateList = new ArrayList<Date>();
+                for(AlarmDate aDate : beforeAvailableAdList) {
+                    beforeAvailableDateList.add(DateUtil.strToDate(aDate.getDate(), DateUtil.DATE_FORMAT_YYYY_MM_DD_HYPHEN));
+                }
+                
                 // add alarm_date to db
 
                 AlarmDate ad = new AlarmDate();
@@ -125,18 +139,28 @@ public class MainActivity extends ActionBarActivity {
                 }
 
                 // add alarm schedule
-                List<AlarmDate> availableAdList = db.getAvalibleAlarmDates();
-                if (availableAdList.size() > 0) {
-                    AlarmDate minAd = availableAdList.get(0);
-                    Date minDate = DateUtil.strToDate(minAd.getDate(), DateUtil.DATE_FORMAT_YYYY_MM_DD_HYPHEN);
-                    cwpbr.cancelAlarm(getBaseContext());
-                    cwpbr.setAlarm(getBaseContext(), minDate);
+                List<AlarmDate> afterAvailableAdList = db.getAvalibleAlarmDates();
+                List<Date> afterAvailableDateList = new ArrayList<Date>();
+                for(AlarmDate aDate : afterAvailableAdList) {
+                    afterAvailableDateList.add(DateUtil.strToDate(aDate.getDate(), DateUtil.DATE_FORMAT_YYYY_MM_DD_HYPHEN));
+                }
+                
+                // notification alarm
+                nbr.cancelAlarm(getBaseContext(), beforeAvailableDateList);
+                nbr.setAlarm(getBaseContext(), afterAvailableDateList);
+                
+                // wall paper alarm
+                cwpbr.cancelAlarm(getBaseContext());
+                ruwpbr.cancelAlarm(getBaseContext());
+                if (afterAvailableDateList.size() > 0) {
+                    // change wall paper
+                    Date changeToVolcanoWpDate = afterAvailableDateList.get(0);
+                    cwpbr.setAlarm(getBaseContext(), changeToVolcanoWpDate);
                     
-                    nbr.cancelAlarm(getBaseContext());
-                    nbr.setAlarm(getBaseContext(), minDate);
-                } else {
-                    cwpbr.cancelAlarm(getBaseContext());
-                    nbr.cancelAlarm(getBaseContext());
+                    // return to user wall paper
+                    Date lastDate = afterAvailableDateList.get(afterAvailableDateList.size() - 1);
+                    Date returnToUserWpDate = DateUtil.nDaysAfter(1, lastDate);
+                    ruwpbr.setAlarm(getBaseContext(), returnToUserWpDate);
                 }
 
                 // reset calendar color

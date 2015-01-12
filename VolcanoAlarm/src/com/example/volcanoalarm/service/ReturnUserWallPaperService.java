@@ -6,6 +6,7 @@ import android.app.IntentService;
 import android.app.WallpaperManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 
@@ -14,7 +15,7 @@ import com.example.volcanoalarm.util.DateUtil;
 import com.example.volcanoalarm.util.FileUtil;
 import com.example.volcanoalarm.util.LogUtil;
 
-public class ChangeWallPaperService extends IntentService {
+public class ReturnUserWallPaperService extends IntentService {
     
     Handler mMainThreadHandler = null;
     
@@ -22,8 +23,8 @@ public class ChangeWallPaperService extends IntentService {
      * A constructor is required, and must call the super IntentService(String)
      * constructor with a name for the worker thread.
      */
-    public ChangeWallPaperService() {
-        super("ChangeWallPaperService");
+    public ReturnUserWallPaperService() {
+        super("ReturnUserWallPaperService");
         
         mMainThreadHandler = new Handler();
     }
@@ -38,17 +39,14 @@ public class ChangeWallPaperService extends IntentService {
         mMainThreadHandler.post(new Runnable() {
               @Override
               public void run() {
-                  LogUtil.appendLog(DateUtil.getSysTimeStr() + "execute change wallPaper service");
-                  
+                  LogUtil.appendLog(DateUtil.getSysTimeStr() + "execute return to wallPaper service");
                   WallpaperManager myWallpaperManager = WallpaperManager.getInstance(getApplicationContext());
-                  Bitmap bm = ((BitmapDrawable)myWallpaperManager.getDrawable()).getBitmap();
                   String fileName = getApplicationContext().getFilesDir() + "/wallPaper/userWallPaper.jpg";
-                  FileUtil.saveToInternalStorage(fileName, bm);
                   
                   try {
-                      myWallpaperManager.setResource(R.drawable.ic_launcher);
+                      myWallpaperManager.setBitmap(BitmapFactory.decodeFile(fileName));
                   } catch (IOException e) {
-                      LogUtil.appendLog("set wallPaper error : " + e.getMessage());
+                      LogUtil.appendLog("return to wallPaper error : " + e.getMessage());
                   }
                   
               }

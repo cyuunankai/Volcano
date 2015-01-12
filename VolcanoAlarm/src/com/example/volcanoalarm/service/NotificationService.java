@@ -13,6 +13,7 @@ import android.support.v4.app.TaskStackBuilder;
 import com.example.volcanoalarm.R;
 import com.example.volcanoalarm.NotificationActivity;
 import com.example.volcanoalarm.util.DateUtil;
+import com.example.volcanoalarm.util.LogUtil;
 
 public class NotificationService extends IntentService {
     
@@ -38,7 +39,7 @@ public class NotificationService extends IntentService {
         mMainThreadHandler.post(new Runnable() {
               @Override
               public void run() {
-                  
+                  LogUtil.appendLog(DateUtil.getSysTimeStr() + "execute notification service");
                   notificate(DateUtil.getSysTimeStr() + " 火山喷发预警!");
                   
               }
