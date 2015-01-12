@@ -34,7 +34,7 @@ public class DateUtil {
     public static final String DATE_FORMAT_HH_MM_SS = "HH:mm:ss";
     
     public static String getToday(){
-    	return toDateString(new java.util.Date(), DATE_FORMAT_YYYY_MM_DD_HH_MM_SS_HYPHEN);
+    	return toDateString(new java.util.Date(), DATE_FORMAT_YYYY_MM_DD_HYPHEN);
     }
     
     public static String getSysTimeStr(){
