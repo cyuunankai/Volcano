@@ -40,19 +40,19 @@ public class NotificationService extends IntentService {
               @Override
               public void run() {
                   LogUtil.appendLog(DateUtil.getSysTimeStr() + "execute notification service");
-                  notificate(DateUtil.getSysTimeStr() + " 火山喷发预警!");
+                  notificate();
                   
               }
           });
     }
     
-    public void notificate(String msg){
+    public void notificate() {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.abc_ab_bottom_solid_dark_holo)
-                .setContentTitle("notification")
+                .setContentTitle("火山喷发预警!")
                 .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
-                .setContentText(msg);
+                .setContentText("做点让自己开心的事吧！详情请点我！");
         
         // Creates an explicit intent for an Activity in your app
         Intent resultIntent = new Intent(this, NotificationActivity.class);
