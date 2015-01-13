@@ -4,5 +4,10 @@
     android:layout_height="match_parent"
     tools:context="${relativePackage}.${activityClass}" >
 
+	<TextView
+        android:id="@+id/textview_notification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="出门溜达溜达，心情会变好哦！ \n上网购物，心情也会变好哦！ \n吃顿大餐，心情会更爽哦！ \n"/>
 
 </RelativeLayout>
