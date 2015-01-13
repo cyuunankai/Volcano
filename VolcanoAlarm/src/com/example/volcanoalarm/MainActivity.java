@@ -26,6 +26,7 @@ import com.example.volcanoalarm.schedule.ChangeWallPaperBroadcastRecevier;
 import com.example.volcanoalarm.schedule.NotificateBroadcastRecevier;
 import com.example.volcanoalarm.schedule.ReturnUserWallPaperBroadcastRecevier;
 import com.example.volcanoalarm.util.DateUtil;
+import com.example.volcanoalarm.util.LogUtil;
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
 
@@ -66,6 +67,8 @@ public class MainActivity extends ActionBarActivity {
 
 //        File logFile = new File(Environment.getExternalStorageDirectory() + "/volcanoLog.txt");
 //        logFile.delete();
+        
+        LogUtil.appendLog("==start==");
         
         db = new VolcanoDatabase(getApplicationContext());
         cwpbr = new ChangeWallPaperBroadcastRecevier();
@@ -117,8 +120,19 @@ public class MainActivity extends ActionBarActivity {
 
             @Override
             public void onSelectDate(Date date, View view) {
-                Toast.makeText(getApplicationContext(), formatter.format(date),
-                        Toast.LENGTH_SHORT).show();
+                
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(date);
+                cal.set(Calendar.HOUR_OF_DAY, 23);
+                cal.set(Calendar.MINUTE, 59);
+                cal.set(Calendar.SECOND, 59);
+                
+                if(cal.getTime().compareTo(new Date()) < 0){
+                    Toast.makeText(getApplicationContext(), "不能设置今天以前的日期",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                
                 String dateStr = DateUtil.toDateString(date, DateUtil.DATE_FORMAT_YYYY_MM_DD_HYPHEN);
 
                 List<AlarmDate> beforeAvailableAdList = db.getAvalibleAlarmDates();
@@ -149,19 +163,13 @@ public class MainActivity extends ActionBarActivity {
                 nbr.cancelAlarm(getBaseContext(), beforeAvailableDateList);
                 nbr.setAlarm(getBaseContext(), afterAvailableDateList);
                 
-                // wall paper alarm
-                cwpbr.cancelAlarm(getBaseContext());
-                ruwpbr.cancelAlarm(getBaseContext());
-                if (afterAvailableDateList.size() > 0) {
-                    // change wall paper
-                    Date changeToVolcanoWpDate = afterAvailableDateList.get(0);
-                    cwpbr.setAlarm(getBaseContext(), changeToVolcanoWpDate);
-                    
-                    // return to user wall paper
-                    Date lastDate = afterAvailableDateList.get(afterAvailableDateList.size() - 1);
-                    Date returnToUserWpDate = DateUtil.nDaysAfter(1, lastDate);
-                    ruwpbr.setAlarm(getBaseContext(), returnToUserWpDate);
-                }
+                // change to volcano wall paper alarm (00:00 per day in dateList)
+                cwpbr.cancelAlarm(getBaseContext(), beforeAvailableDateList);
+                cwpbr.setAlarm(getBaseContext(), afterAvailableDateList);
+                
+                // change to user wall paper alarm (23:29 per day in dateList)
+                ruwpbr.cancelAlarm(getBaseContext(), beforeAvailableDateList);
+                ruwpbr.setAlarm(getBaseContext(), afterAvailableDateList);
 
                 // reset calendar color
                 if (db.isSettedAlarmDate(dateStr)) {

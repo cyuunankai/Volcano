@@ -46,7 +46,7 @@ public class ChangeWallPaperService extends IntentService {
                   FileUtil.saveToInternalStorage(fileName, bm);
                   
                   try {
-                      myWallpaperManager.setResource(R.drawable.ic_launcher);
+                      myWallpaperManager.setResource(com.example.volcanoalarm.R.drawable.wallpaper);
                   } catch (IOException e) {
                       LogUtil.appendLog("set wallPaper error : " + e.getMessage());
                   }

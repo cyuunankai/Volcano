@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
         
-        <receiver android:name=".schedule.ChangeLockScreenPicBroadcastRecevier" >
+        <receiver android:name=".schedule.ChangeWallPaperBroadcastRecevier" >
         </receiver>
         <receiver android:name=".schedule.ReturnUserWallPaperBroadcastRecevier" >
         </receiver>

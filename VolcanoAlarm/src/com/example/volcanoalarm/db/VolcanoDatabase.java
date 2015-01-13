@@ -175,14 +175,15 @@ public class VolcanoDatabase {
 		String[] projection = { VolcanoContract.AlarmDate._ID,
 				VolcanoContract.AlarmDate.COLUMN_NAME_DATE};
 		
-
+        String order = VolcanoContract.AlarmDate.COLUMN_NAME_DATE + " ASC ";
+        
 		Cursor c = db.query(VolcanoContract.AlarmDate.TABLE_NAME, // The table to query
 				projection, // The columns to return
 				null, // The columns for the WHERE clause
 				null, // The values for the WHERE clause
 				null, // don't group the rows
 				null, // don't filter by row groups
-				null // The sort order
+				order // The sort order
 				);
 
 		List<AlarmDate> list = new ArrayList<AlarmDate>();
