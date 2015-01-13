@@ -5,14 +5,10 @@ import java.io.IOException;
 import android.app.IntentService;
 import android.app.WallpaperManager;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 
-import com.caldroid.R;
 import com.example.volcanoalarm.util.DateUtil;
-import com.example.volcanoalarm.util.FileUtil;
 import com.example.volcanoalarm.util.LogUtil;
 
 public class ReturnUserWallPaperService extends IntentService {

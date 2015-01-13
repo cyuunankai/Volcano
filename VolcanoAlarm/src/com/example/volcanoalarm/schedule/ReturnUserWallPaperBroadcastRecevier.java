@@ -51,6 +51,8 @@ public class ReturnUserWallPaperBroadcastRecevier extends BroadcastReceiver {
             calendar.set(Calendar.MINUTE, 0);
             calendar.set(Calendar.SECOND, 0);
             am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pi);
+            
+            requstCode++;
         }
     }
 
