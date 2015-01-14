@@ -37,7 +37,7 @@ public class ReturnUserWallPaperService extends IntentService {
               public void run() {
                   LogUtil.appendLog(DateUtil.getSysTimeStr() + "execute return to wallPaper service");
                   WallpaperManager myWallpaperManager = WallpaperManager.getInstance(getApplicationContext());
-                  String fileName = getApplicationContext().getFilesDir() + "/wallPaper/userWallPaper.jpg";
+                  String fileName = getApplicationContext().getFilesDir() + "/userWallPaper.jpg";
                   
                   try {
                       myWallpaperManager.setBitmap(BitmapFactory.decodeFile(fileName));

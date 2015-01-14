@@ -42,7 +42,7 @@ public class ChangeWallPaperService extends IntentService {
                   
                   WallpaperManager myWallpaperManager = WallpaperManager.getInstance(getApplicationContext());
                   Bitmap bm = ((BitmapDrawable)myWallpaperManager.getDrawable()).getBitmap();
-                  String fileName = getApplicationContext().getFilesDir() + "/wallPaper/userWallPaper.jpg";
+                  String fileName = getApplicationContext().getFilesDir() + "/userWallPaper.jpg";
                   FileUtil.saveToInternalStorage(fileName, bm);
                   
                   try {
