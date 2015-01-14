@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -34,10 +35,16 @@
         </receiver>
         <receiver android:name=".schedule.NotificateBroadcastRecevier" >
         </receiver>
+        <receiver android:name=".schedule.ResetScheduleBroadcastRecevier" >
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_EXTERNAL_APPLICATIONS_AVAILABLE" />
+            </intent-filter>
+        </receiver>
 
         <service android:name=".service.ChangeWallPaperService" />
         <service android:name=".service.ReturnUserWallPaperService" />
         <service android:name=".service.NotificationService" />
+        <service android:name=".service.ResetScheduleService" />
 
         <activity
             android:name=".NotificationActivity"
