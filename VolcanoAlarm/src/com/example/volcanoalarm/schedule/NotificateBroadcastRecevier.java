@@ -50,8 +50,8 @@ public class NotificateBroadcastRecevier extends BroadcastReceiver {
             
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
-            calendar.set(Calendar.HOUR_OF_DAY, 16);
-            calendar.set(Calendar.MINUTE, 50);
+            calendar.set(Calendar.HOUR_OF_DAY, 9);
+            calendar.set(Calendar.MINUTE, 0);
             calendar.set(Calendar.SECOND, 0);
             am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pi);
             

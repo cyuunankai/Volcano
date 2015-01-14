@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.volcanoalarm"
+    android:installLocation="internalOnly"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -35,9 +36,9 @@
         </receiver>
         <receiver android:name=".schedule.NotificateBroadcastRecevier" >
         </receiver>
-        <receiver android:name=".schedule.ResetScheduleBroadcastRecevier" >
+        <receiver android:name=".schedule.ResetScheduleBroadcastRecevier">
             <intent-filter>
-                <action android:name="android.intent.action.ACTION_EXTERNAL_APPLICATIONS_AVAILABLE" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>  
             </intent-filter>
         </receiver>
 
